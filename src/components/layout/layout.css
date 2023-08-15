@@ -1,0 +1,11 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout main {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}

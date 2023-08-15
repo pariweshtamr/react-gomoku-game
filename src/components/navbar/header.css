@@ -1,0 +1,37 @@
+.navbar {
+  padding: 1.5rem !important;
+}
+
+.logo {
+  text-decoration: none;
+  border: 1px solid #333;
+  color: #333;
+  padding: 5px 30px;
+  letter-spacing: 2px;
+  font-size: 24px;
+  background: #fff;
+  transition: 0.3s all ease-in-out;
+}
+
+.logo:hover {
+  transition: 0.3s all ease-in-out;
+  background: #333;
+  color: #fff !important;
+  border: 1px solid #fff;
+}
+
+.right-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.right-links a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s all ease-in-out;
+}
+
+.right-links a:hover {
+  color: #ffca2b;
+  transition: 0.3s all ease-in-out;
+}
