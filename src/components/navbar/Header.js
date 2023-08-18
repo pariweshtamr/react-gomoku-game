@@ -1,8 +1,16 @@
 import { Container, Nav, Navbar } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import "./header.css"
+import { useDispatch, useSelector } from "react-redux"
+import { logoutSuccess } from "../../redux/user/userSlice"
 const Header = () => {
-  const isAuthenticated = true
+  const dispatch = useDispatch()
+  const { isAuthenticated } = useSelector((state) => state.user)
+
+  const handleLogout = () => {
+    dispatch(logoutSuccess(false))
+  }
+
   return (
     <Navbar expand="lg" bg="dark" className="bg-body-tertiary navbar">
       <Container>
@@ -14,8 +22,15 @@ const Header = () => {
           <Nav className="ms-auto right-links">
             {isAuthenticated ? (
               <>
-                <Link to="/login">Logout</Link>
-                <Link to="/history">Previous Games</Link>
+                <button
+                  type="button"
+                  className="global-btn"
+                  style={{ width: "max-content" }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+                <Link to="/games">Previous Games</Link>
               </>
             ) : (
               <Link to="/login">Login</Link>

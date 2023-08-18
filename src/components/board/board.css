@@ -1,0 +1,8 @@
+table {
+  text-align: center;
+  margin: auto;
+  height: auto;
+  width: 100%;
+  border: 1px solid black;
+  table-layout: fixed;
+}

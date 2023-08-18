@@ -1,0 +1,12 @@
+.square {
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  background: #e4e4a1;
+  border: 0.5px solid black;
+}
+.circle {
+  border: 1px solid;
+  border-radius: 50%;
+  height: 100%;
+}

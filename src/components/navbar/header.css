@@ -5,24 +5,25 @@
 .logo {
   text-decoration: none;
   border: 1px solid #333;
-  color: #333;
+  color: #fff;
   padding: 5px 30px;
   letter-spacing: 2px;
   font-size: 24px;
-  background: #fff;
+  background: #333;
   transition: 0.3s all ease-in-out;
 }
 
 .logo:hover {
   transition: 0.3s all ease-in-out;
-  background: #333;
-  color: #fff !important;
-  border: 1px solid #fff;
+  background: #fff;
+  color: #333 !important;
+  border: 1px solid #333;
 }
 
 .right-links {
   display: flex;
   gap: 1.5rem;
+  align-items: center;
 }
 
 .right-links a {

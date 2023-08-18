@@ -1,0 +1,17 @@
+.games {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.games .game-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
