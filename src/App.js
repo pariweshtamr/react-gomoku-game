@@ -6,6 +6,7 @@ import GamePage from "./pages/game/GamePage"
 import LogPage from "./pages/log/LogPage"
 import HistoryPage from "./pages/history/HistoryPage"
 import { useSelector } from "react-redux"
+import RegisterPage from "./pages/register/RegisterPage"
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.user)
@@ -15,6 +16,7 @@ function App() {
         <Route path="/">
           <Route index element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route
             path="/game"
             element={isAuthenticated ? <GamePage /> : <Navigate to="/" />}

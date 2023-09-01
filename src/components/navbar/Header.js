@@ -33,7 +33,12 @@ const Header = () => {
                 <Link to="/games">Previous Games</Link>
               </>
             ) : (
-              <Link to="/login">Login</Link>
+              <div className="d-flex align-items-center gap-4">
+                <Link to="/login">Login</Link>
+                <Link to="/register" className="register-btn">
+                  Register
+                </Link>
+              </div>
             )}
           </Nav>
         </Navbar.Collapse>

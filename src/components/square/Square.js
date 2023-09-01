@@ -1,5 +1,5 @@
 import "./square.css"
-const Square = ({ color, handleClick, status, prevGame }) => {
+const Square = ({ color, handleClick, status }) => {
   return (
     <td className="square" onClick={status ? null : handleClick}>
       <div

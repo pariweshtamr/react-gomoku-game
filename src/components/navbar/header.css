@@ -36,3 +36,14 @@
   color: #ffca2b;
   transition: 0.3s all ease-in-out;
 }
+
+.register-btn {
+  border: 1px solid #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.register-btn:hover {
+  background: #333;
+  color: #fff !important;
+}
