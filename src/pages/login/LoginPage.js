@@ -1,12 +1,10 @@
-import { Form } from "react-bootstrap"
+import { Form, Spinner } from "react-bootstrap"
 import Layout from "../../components/layout/Layout"
 import "./login.css"
 import { useEffect, useState } from "react"
-import { users } from "../../constants/authorizedUsers"
 import { useDispatch, useSelector } from "react-redux"
-import { loginSuccess } from "../../redux/user/userSlice"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-hot-toast"
+import { Link, useNavigate } from "react-router-dom"
+import { loginAction } from "../../redux/user/userAction"
 
 const initialState = {
   username: "",
@@ -18,9 +16,9 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const query = new URLSearchParams(window.location.search)
   const boardSize = parseInt(query.get("size"))
-  const { isAuthenticated } = useSelector((state) => state.user)
+  const { isAuthenticated, isLoading } = useSelector((state) => state.user)
 
-  const authUsers = [...users]
+  // const authUsers = [...users]
   const handleChange = (e) => {
     const { name, value } = e.target
 
@@ -29,23 +27,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const { username, password } = form
-    const validUser = authUsers.find((user) => {
-      const valid = user.username === username
-      return valid
-    })
-
-    if (!validUser) {
-      toast.error("Invalid credentials!")
-      return
-    }
-
-    if (validUser?.password !== password) {
-      toast.error("Invalid password!")
-      return
-    }
-
-    dispatch(loginSuccess(true))
+    dispatch(loginAction(form))
   }
 
   useEffect(() => {
@@ -69,9 +51,15 @@ const LoginPage = () => {
             onChange={handleChange}
           />
           <button className="global-btn" type="submit">
-            LOGIN
+            {isLoading ? <Spinner variant="light" /> : "LOGIN"}
           </button>
         </Form>
+        <p className="text-center mt-3" style={{ fontSize: "12px" }}>
+          Don&apos;t have an account?{" "}
+          <span>
+            <Link to={"/register"}>Register</Link>
+          </span>
+        </p>
       </div>
     </Layout>
   )

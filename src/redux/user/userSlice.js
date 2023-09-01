@@ -5,6 +5,7 @@ const initialState = {
   isAuthenticated: sessionStorage.getItem("isAuthenticated")
     ? JSON.parse(sessionStorage.getItem("isAuthenticated"))
     : false,
+  user: {},
 }
 
 const userSlice = createSlice({
@@ -15,8 +16,10 @@ const userSlice = createSlice({
       state.isLoading = true
     },
     loginSuccess: (state, { payload }) => {
-      state.isAuthenticated = payload
-      sessionStorage.setItem("isAuthenticated", payload)
+      state.isLoading = false
+      state.user = payload
+      state.isAuthenticated = true
+      sessionStorage.setItem("isAuthenticated", true)
     },
     logoutSuccess: (state, { payload }) => {
       state.isAuthenticated = payload
