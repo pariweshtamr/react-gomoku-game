@@ -6,7 +6,7 @@ export const requestApi = async (axiosInfo, sendAuth) => {
       axiosInfo = {
         ...axiosInfo,
         headers: {
-          Authorization: "",
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     }

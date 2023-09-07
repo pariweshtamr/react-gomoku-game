@@ -1,26 +1,25 @@
 import { Container } from "react-bootstrap"
 import Layout from "../../components/layout/Layout"
-import { useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Board from "../../components/board/Board"
+import { getPreviousGameAction } from "../../redux/game/gameAction"
 
 const LogPage = () => {
-  const { games } = useSelector((state) => state.game)
-  const [selectedGame, setSelectedGame] = useState()
+  const dispatch = useDispatch()
+  const { previousGame } = useSelector((state) => state.game)
   const { id } = useParams()
 
   useEffect(() => {
-    if (games?.length) {
-      setSelectedGame(games?.find((game) => game.id === id))
-    }
-  }, [games, id])
+    dispatch(getPreviousGameAction(id))
+  }, [dispatch, id])
 
   return (
     <Layout>
       <Container className="py-5">
-        {selectedGame?.size && (
-          <Board boardSize={selectedGame?.size} storedGame={selectedGame} />
+        {previousGame?.size && (
+          <Board boardSize={previousGame?.size} storedGame={previousGame} />
         )}
       </Container>
     </Layout>

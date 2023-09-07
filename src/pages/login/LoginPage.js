@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { loginAction } from "../../redux/user/userAction"
+import { setGameAction } from "../../redux/game/gameAction"
 
 const initialState = {
   username: "",
@@ -16,7 +17,8 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const query = new URLSearchParams(window.location.search)
   const boardSize = parseInt(query.get("size"))
-  const { isAuthenticated, isLoading } = useSelector((state) => state.user)
+  const { game } = useSelector((state) => state.game)
+  const { user, isLoading } = useSelector((state) => state.user)
 
   // const authUsers = [...users]
   const handleChange = (e) => {
@@ -31,8 +33,20 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    isAuthenticated && navigate(`/game?size=${boardSize}`)
-  }, [isAuthenticated, boardSize, navigate])
+    if (user?._id && boardSize) {
+      dispatch(
+        setGameAction({
+          size: +boardSize,
+        })
+      )
+    } else if (user?._id) {
+      navigate("/")
+    }
+  }, [boardSize, user?._id, dispatch, navigate])
+
+  useEffect(() => {
+    game?._id && navigate(`/game/${game._id}`)
+  }, [game?._id, game?.size, navigate])
   return (
     <Layout>
       <div className="form-container">

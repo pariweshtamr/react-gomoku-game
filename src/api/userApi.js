@@ -23,6 +23,15 @@ const userAPI = {
     const data = await requestApi(axiosData)
     return data
   },
+
+  getUser: async () => {
+    const axiosData = {
+      url: userEp,
+      method: "GET",
+    }
+    const data = await requestApi(axiosData, true)
+    return data
+  },
 }
 
 export default userAPI

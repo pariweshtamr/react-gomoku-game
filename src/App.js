@@ -5,11 +5,21 @@ import LoginPage from "./pages/login/LoginPage"
 import GamePage from "./pages/game/GamePage"
 import LogPage from "./pages/log/LogPage"
 import HistoryPage from "./pages/history/HistoryPage"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import RegisterPage from "./pages/register/RegisterPage"
+import { useEffect } from "react"
+import { getUserAction } from "./redux/user/userAction"
 
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.user)
+
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken")
+    if (accessToken) {
+      dispatch(getUserAction())
+    }
+  }, [dispatch])
   return (
     <BrowserRouter>
       <Routes>
@@ -18,16 +28,16 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
-            path="/game"
-            element={isAuthenticated ? <GamePage /> : <Navigate to="/" />}
+            path="/game/:id"
+            element={user?._id ? <GamePage /> : <Navigate to="/" />}
           />
           <Route
             path="/games"
-            element={isAuthenticated ? <HistoryPage /> : <Navigate to="/" />}
+            element={user?._id ? <HistoryPage /> : <Navigate to="/" />}
           />
           <Route
             path="/game-log/:id"
-            element={isAuthenticated ? <LogPage /> : <Navigate to="/" />}
+            element={user?._id ? <LogPage /> : <Navigate to="/" />}
           />
         </Route>
       </Routes>

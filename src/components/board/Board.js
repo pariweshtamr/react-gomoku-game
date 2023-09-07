@@ -1,12 +1,16 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Square from "../square/Square"
 import "./board.css"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { setGameInfo } from "../../redux/game/gameSlice"
-import { v4 as uuidv4 } from "uuid"
+import {
+  deleteIncompleteGameAction,
+  updateGameAction,
+} from "../../redux/game/gameAction"
+import { setGameSuccess } from "../../redux/game/gameSlice"
+import Swal from "sweetalert2"
 
-const Board = ({ boardSize, storedGame }) => {
+const Board = ({ game, boardSize, storedGame }) => {
   const dispatch = useDispatch()
   const [isWhite, setIsWhite] = useState(true)
   const [winner, setWinner] = useState("")
@@ -71,24 +75,24 @@ const Board = ({ boardSize, storedGame }) => {
         newGrid[x][y] = isWhite ? "w" : "b"
         setGrid(newGrid)
         setIsWhite(!isWhite)
+        dispatch(updateGameAction({ id: game?._id, boardState: newGrid }))
 
         // Game logic for checking wins
         if (checkWin(x, y, isWhite ? "w" : "b")) {
           setIsFinished(true)
           setWinner(isWhite ? "White" : "Black")
           dispatch(
-            setGameInfo({
-              id: uuidv4(),
+            updateGameAction({
+              id: game?._id,
               winner: isWhite ? "White" : "Black",
-              date: new Date(),
               boardState: grid,
-              size: boardSize,
+              isComplete: true,
             })
           )
         }
       }
     },
-    [grid, isWhite, checkWin, dispatch, boardSize]
+    [grid, isWhite, checkWin, dispatch, game?._id]
   )
 
   const handleReset = useCallback(() => {
@@ -103,20 +107,48 @@ const Board = ({ boardSize, storedGame }) => {
 
   const handleLeave = () => {
     if (!isFinished) {
-      navigate("/")
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ffca2b",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Leave it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(deleteIncompleteGameAction(game?._id))
+        }
+      })
     } else {
-      navigate("/games")
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ffca2b",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Leave it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(setGameSuccess({})) && navigate("/games")
+        }
+      })
     }
   }
 
+  useEffect(() => {
+    !game?._id && !storedGame && navigate("/")
+  }, [game?._id, navigate, storedGame])
+
   return (
     <div
-      style={{ textAlign: "center" }}
+      style={{ textAlign: "center", width: "50%", margin: "auto" }}
       className="d-flex flex-column gap-3 justify-content-center align-items-center"
     >
-      {storedGame?.id ? (
+      {storedGame?._id ? (
         <>
-          <h5>Winner: {storedGame.winner}</h5>
+          <h5>Winner: {storedGame?.winner}</h5>
         </>
       ) : (
         <>
@@ -130,14 +162,13 @@ const Board = ({ boardSize, storedGame }) => {
         </>
       )}
 
-      <div style={{ margin: "auto", width: "40%" }}>
+      <div style={{ margin: "auto", width: "90%" }}>
         {storedGame?.boardState ? (
           <table cellSpacing={0}>
             <tbody>
-              {storedGame.boardState?.map((row, i) => (
+              {storedGame?.boardState?.map((row, i) => (
                 <tr key={"row_" + i}>
                   {row.map((col, j) => {
-                    console.log(col)
                     const color =
                       col === "+" ? "#e4e4a1" : col === "w" ? "white" : "black"
                     return (
@@ -180,7 +211,7 @@ const Board = ({ boardSize, storedGame }) => {
         )}
       </div>
 
-      {storedGame?.id ? (
+      {storedGame?._id ? (
         <Link
           to="/games"
           className="global-btn px-4"
@@ -189,10 +220,7 @@ const Board = ({ boardSize, storedGame }) => {
           Back
         </Link>
       ) : (
-        <div
-          className="d-flex justify-content-around m-auto"
-          style={{ width: "50%" }}
-        >
+        <div className="d-flex justify-content-around w-100">
           <button
             className="global-btn px-4"
             onClick={handleReset}
